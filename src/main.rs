@@ -1,18 +1,17 @@
-use endoflife::rust;
-use serde_json;
+use endoflife::request::{
+    api_request_all_rust_cycles, api_request_single_rust_cycle
+};
 
 fn main() {
-
-     let json_str = r#"{
-    "releaseDate": "2024-09-05",
-    "eol": false,
-    "latest": "1.81.0",
-    "latestReleaseDate": "2024-09-05",
-    "lts": false
-}"#;
-
-    let json_object = serde_json::from_str::<rust::RustSingleCycle>(json_str);
-
-    print!("{:?}", json_object);
-
+    match api_request_single_rust_cycle("1.81") {
+        Ok(data) => {
+            // If the request is successful, serialize and print the result
+            let json_str = serde_json::to_string_pretty(&data).unwrap();
+            println!("{}", json_str);
+        }
+        Err(e) => {
+            // If there's an error, print the error message
+            eprintln!("Error: {}", e);
+        }
+    }
 }
